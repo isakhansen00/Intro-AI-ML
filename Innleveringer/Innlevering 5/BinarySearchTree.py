@@ -1,5 +1,5 @@
 from binarytree import Node
-
+from collections import namedtuple
 
 class BinarySearchTree:
     def __init__(self, root=None):
