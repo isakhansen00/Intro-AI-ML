@@ -18,10 +18,38 @@ person_six = Persons(
 )
 person_seven = Persons("Hinnerud", "Johnny", "Lørum Mellem 50", "6507", "Kristiansund")
 
+'''
+test_tree = BinaryTree()
+node_one = BinaryTreeNode(person_one)
+node_two = BinaryTreeNode(person_two)
+node_three = BinaryTreeNode(person_three)
+node_four = BinaryTreeNode(person_four)
+node_five = BinaryTreeNode(person_five)
+node_six = BinaryTreeNode(person_six)
+node_seven = BinaryTreeNode(person_seven)
+test_tree.insert(value=node_one)
+test_tree.insert(value=node_two)
+test_tree.insert(value=node_three)
+test_tree.insert(value=node_four)
+test_tree.insert(value=node_five)
+test_tree.insert(value=node_six)
+test_tree.insert(value=node_seven)
+test_tree.delete(node_three)
+left_most = test_tree.findMin()
+print(left_most.value)
+'''
+
 
 def test_make_tree_without_BTN():
     test_tree = BinaryTree(person_one)
     assert isinstance(test_tree, BinaryTree)
+
+def test_insert_root():
+    test_tree = BinaryTree()
+    node_one = BinaryTreeNode(person_one)
+    node_two = BinaryTreeNode(person_one)
+    test_tree.insert(value = node_one)
+    test_tree.insert(value = node_two)
 
 
 def test_make_tree_with_BTN():
@@ -249,13 +277,13 @@ def test_delete():
     node_five = BinaryTreeNode(person_five)
     node_six = BinaryTreeNode(person_six)
     node_seven = BinaryTreeNode(person_seven)
-    node_one = test_tree.insert(value=node_one)
-    node_two = test_tree.insert(value=node_two)
-    node_three = test_tree.insert(value=node_three)
-    node_four = test_tree.insert(value=node_four)
-    node_five = test_tree.insert(value=node_five)
-    node_six = test_tree.insert(value=node_six)
-    node_seven = test_tree.insert(value=node_seven)
+    test_tree.insert(value=node_one)
+    test_tree.insert(value=node_two)
+    test_tree.insert(value=node_three)
+    test_tree.insert(value=node_four)
+    test_tree.insert(value=node_five)
+    test_tree.insert(value=node_six)
+    test_tree.insert(value=node_seven)
     test_tree.delete(node_two)
     left_most = test_tree.findMax()
     assert left_most.value.value == Persons(
@@ -265,3 +293,31 @@ def test_delete():
         zip="7414",
         city="Trondheim",
     )
+
+def test_delete_left_most():
+    test_tree = BinaryTree()
+    node_one = BinaryTreeNode(person_one)
+    node_two = BinaryTreeNode(person_two)
+    node_three = BinaryTreeNode(person_three)
+    node_four = BinaryTreeNode(person_four)
+    node_five = BinaryTreeNode(person_five)
+    node_six = BinaryTreeNode(person_six)
+    node_seven = BinaryTreeNode(person_seven)
+    test_tree.insert(value=node_one)
+    test_tree.insert(value=node_two)
+    test_tree.insert(value=node_three)
+    test_tree.insert(value=node_four)
+    test_tree.insert(value=node_five)
+    test_tree.insert(value=node_six)
+    test_tree.insert(value=node_seven)
+    test_tree.delete(node_three)
+    left_most = test_tree.findMin()
+    assert left_most.value.value == Persons(
+        etternavn="Hinnerud",
+        fornavn="Johnny",
+        addresse="Lørum Mellem 50",
+        zip="6507",
+        city="Kristiansund",
+    )
+
+person_seven = Persons("Hinnerud", "Johnny", "Lørum Mellem 50", "6507", "Kristiansund")
