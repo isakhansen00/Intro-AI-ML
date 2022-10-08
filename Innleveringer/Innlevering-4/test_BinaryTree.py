@@ -4,7 +4,6 @@ from collections import namedtuple
 import pytest
 
 Persons = namedtuple("Person", ["etternavn", "fornavn", "addresse", "zip", "city"])
-
 person_one = Persons(
     "Kristiansen", "Morten Kristian", "Leinahytta 36", "7224", "Melhus"
 )
@@ -51,7 +50,6 @@ def test_make_tree_with_BTN():
 
 
 def test_find_left_most():
-
     left_most = test_tree.findLeftMost(node_one)
     assert left_most.value.value == Persons(
         etternavn="Gjerstad",
@@ -63,7 +61,6 @@ def test_find_left_most():
 
 
 def test_findmin():
-
     left_most = test_tree.findMin()
     assert left_most.value.value == Persons(
         etternavn="Gjerstad",
@@ -75,7 +72,6 @@ def test_findmin():
 
 
 def test_find_right_most():
-
     left_most = test_tree.findRightMost(node_one)
     assert left_most.value.value == Persons(
         etternavn="Østby",
@@ -87,7 +83,6 @@ def test_find_right_most():
 
 
 def test_find_max():
-
     left_most = test_tree.findMax()
     assert left_most.value.value == Persons(
         etternavn="Østby",
@@ -154,10 +149,6 @@ def test_deleteMin_with_only_root_and_right_value():
         zip="7033",
         city="Trondheim",
     )
-
-
-person_four = Persons("Nymann", "Roy-Øystein", "Honeset 77", "7033", "Trondheim")
-
 
 def test_delete_min():
     test_tree.deleteMin()
