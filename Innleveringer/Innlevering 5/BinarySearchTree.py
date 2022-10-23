@@ -1,19 +1,18 @@
 from binarytree import Node
-
+import warnings
 
 class BinarySearchTree:
     def __init__(self, root=None):
         self.root = root
         self.size = 0
-        """ Initialize binary search tree
 
-        # Inputs:
-        root:    (optional) An instance of Node which is the root of the tree
+        if self.root != None and self.root.is_bst:
+            pass
+        elif self.root == None:
+            pass
+        else:
+            raise ValueError("Does not satisfy the requirements of a Binary Search Tree")
 
-        # Notes:
-        If a root is supplied, validate that the tree meets the requirements
-        of a search tree. If not, raise ValueError.
-        """
 
     def get_root(self):
         return self.root
@@ -33,7 +32,9 @@ class BinarySearchTree:
                     parent = current
                     current = current.right
                 else:
-                    return False  # Duplicate node not inserted
+                    warnings.warn(f"Duplicate value can not be added to the tree")
+                    return False # Duplicate node not inserted
+                    
 
             # Create the new node and attach it to the parent node
             if node_value < parent.value:
@@ -41,18 +42,9 @@ class BinarySearchTree:
             else:
                 parent.right = Node(node_value)
 
-        self.size += 1  # Increase tree size
-        return True  # Element inserted
-        """Insert a new node into the tree
+        self.size += 1 
+        return True # node has succesfully been inserted
 
-        # Inputs:
-        value:    Value of new node
-
-        # Notes:
-        The method should issue a warning if the value already exists in the tree.
-        See https://docs.python.org/3/library/warnings.html#warnings.warn
-        In the case of duplicate values, leave the tree unchanged.
-        """
 
     def find(self, node_value):
         current = self.root  # Start from the root
@@ -70,28 +62,24 @@ class BinarySearchTree:
         raise KeyError("Number not found, please try again")
 
     def _delete_helper(self, root, nodes):
-        # Base Case
+
         if root is None:
             return root
 
         if nodes is None:
             raise KeyError("Value not found")
 
-        # Recursive calls for ancestors of
-        # node to be deleted
+        # Recursively iterate through tree to find node to be deleted
         if nodes < root.value:
             root.left = self._delete_helper(root.left, nodes)
             return root
 
+        # Same as above
         elif nodes > root.value:
             root.right = self._delete_helper(root.right, nodes)
             return root
 
-        # We reach here when root is the node
-        # to be deleted.
-
-        # If root node is a leaf node
-
+        # Case to handle if the root node is the only node
         if root.left is None and root.right is None:
             return None
 
@@ -107,53 +95,39 @@ class BinarySearchTree:
             root = None
             return temp
 
-        # If both children exist
-
         succesor_parent = root
 
-        # Find the inorder successor
+        # Finding the inorder successor 
         succesor = root.right
 
         while succesor.left != None:
             succesor_parent = succesor
             succesor = succesor.left
 
-        # Delete successor
+        # Deleting the successor
         if succesor_parent != root:
             succesor_parent.left = succesor.right
         else:
             succesor_parent.right = succesor.right
 
-        # Copy Successor Data to root
 
         root.value = succesor.value
 
         return root
 
-    def delete(self, node_value):
+    def delete(self, node_value):       
+        if self.root == None:
+            raise KeyError("Tree is already empty")
+        elif node_value < self.root.min_node_value or node_value > self.root.max_node_value:
+            raise KeyError("Given number is not in the tree, please try another number")
+
         return self._delete_helper(self.root, node_value)
 
-        """Delete node with given value
 
-        # Inputs:
-        value:    Value of node to be deleted
-
-        # Notes:
-        This function should handle a number of "regular" cases:
-        - Deleting a leaf node
-        - Deleting a node with one child
-        - Deleting a node with two childen
-          (the node should be replaced with its inorder successor)
-
-        It should also handle the following "edge cases":
-        - Value not found in tree (raise KeyError)
-        - Deleting the root node
-        - Calling delete on an empty tree (raise KeyError)
-        """
 
     def level(self, node_value):
-        current = self.root  # Start from the root
-        level = 0
+        current = self.root 
+        level = 1
 
         while current != None:
             if node_value < current.value:
@@ -164,12 +138,13 @@ class BinarySearchTree:
                 level += 1
             else:  # element matches current.element
                 return print(
-                    f"The level of the node: {node_value} is {level}"
-                )  # Element is found
+                    f"The level of the node {node_value}: is {level}"
+                ) 
 
         raise KeyError("Number not found, please try again")
 
 
+# OPPGAVE 2
 test_tree = BinarySearchTree()
 test_tree = BinarySearchTree()
 test_tree.insert(7)
@@ -184,14 +159,19 @@ test_tree.insert(9)
 test_tree.insert(8)
 test_tree.insert(11)
 test_tree.insert(12)
+#test_tree.insert(12)
 print(test_tree.get_root())
 test_tree.delete(1)
 test_tree.delete(11)
 test_tree.delete(4)
 test_tree.delete(7)
 print(test_tree.get_root())
+#test_tree2 = BinarySearchTree()
+#test_tree2.delete(2)
 
 
+
+# OPPGAVE 3
 new_test_tree = BinarySearchTree()
 with open("random_numbers.txt") as number_file:
     numbers = [line.strip() for line in number_file]
