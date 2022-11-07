@@ -245,7 +245,64 @@ class AStar(Graph):
     ###############################################################################
     '''
     def AStarSearch(self, startVertexName = None, targetVertexName = None):
-        pass
+        self.initPygame()
+        # Check to see that startvertex is in Graph
+        if startVertexName not in self.vertecies:
+            raise KeyError("Start node not present in graph")
+        # Reset visited and previous pointer before running algorithm      
+        vertex = self.vertecies[startVertexName]
+        vertex.g = 1
+        vertex.h = self.heuristics(vertex.name, targetVertexName)
+        vertex.f = vertex.g + vertex.h
+        previous_node = None
+        startNode = self.vertecies[startVertexName]
+        toNode = self.vertecies[targetVertexName]
+        #
+        # Create priority queue, priority = current weight on edge ...
+        # No duplicate edges in queue allowed
+        #
+        import heapdict
+        priqueue = heapdict.heapdict()
+        # Defines enqueue/dequeue methods on priqueue
+        def enqueue(data):
+            priqueue[data] = data.f
+        def dequeue():
+            return priqueue.popitem()[0]
+        
+        enqueue(vertex)
+        while priqueue:
+            # Get the element with lowest priority (i.e. weight on edge) 
+            vertex = dequeue()
+            self.pygameState(vertex, self.GREEN)
+            self.pygameState(startNode,self.BLUE)
+            self.pygameState(toNode,self.RED)
+            # If not visited previously, we need to define the distance
+            if vertex.name == targetVertexName:
+                break
+            if not vertex.known:
+                vertex.g = 1
+            vertex.known = True
+
+            # If the vertex pointed to by the edge has an adjecency list, we need to iterate on it
+            for adjecentedge in vertex.adjecent:
+                if not adjecentedge.vertex.known:
+                    adjecentedge.vertex.previous = vertex
+                    adjecentedge.vertex.g = vertex.g + adjecentedge.weight
+                    adjecentedge.vertex.h = self.heuristics(adjecentedge.vertex.name, targetVertexName)
+                    adjecentedge.vertex.f = adjecentedge.vertex.g + adjecentedge.vertex.h
+                    adjecentedge.vertex.known = True
+                    enqueue(adjecentedge.vertex)
+                    self.pygameState(adjecentedge.vertex,self.PINK)
+                else:
+                    if adjecentedge.vertex.g > vertex.g + adjecentedge.weight:
+                        adjecentedge.vertex.g = vertex.g + adjecentedge.weight
+                        adjecentedge.vertex.previous = vertex                        
+                        enqueue(adjecentedge.vertex)        
+    
+            self.pygameState(vertex,self.LIGHTGREY)
+        for n in self.getPath(startVertexName, targetVertexName):
+            self.pygameState(n,self.DARKGREEN)
+        return self.getPath(startVertexName, targetVertexName) 
     
 astar = AStar(delay = 0, visual = True)
 
@@ -255,11 +312,11 @@ astar = AStar(delay = 0, visual = True)
 #startVertexName, targetVertexName, removed = astar.readLimitations('xtras.txt')
 #astar.readFile('biggraph.txt')
 #startVertexName, targetVertexName, removed = astar.readLimitations('biggraph_xtras.txt')
-astar.readFile('AStarObligGraf.txt')
-startVertexName, targetVertexName, removed = astar.readLimitations('AStarObligGraf_xtras.txt')
+astar.readFile('INRO-AI-ML/AStarObligGraf.txt')
+startVertexName, targetVertexName, removed = astar.readLimitations('INRO-AI-ML/AStarObligGraf_xtras.txt')
 
-astar.Dijkstra(startVertexName,targetVertexName)
-#astar.AStarSearch(startVertexName, targetVertexName)
+#astar.Dijkstra(startVertexName,targetVertexName)
+astar.AStarSearch(startVertexName, targetVertexName)
 
 if astar.pygame:
     from pygame.locals import *
